@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>La Journée du Compliment</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        label { display: block; margin-top: 1em; }
+        input[type="text"], input[type="email"], select, textarea { width: 100%; padding: 8px; }
+        textarea { height: 150px; }
+        button { margin-top: 1em; padding: 10px 20px; }
+    </style>
+</head>
+<body>
+    <h1>La Journée du Compliment</h1>
+    <p>Du 10 au 13 février, envoie des compliments à un membre de l'équipe. Ils seront envoyés le 14 février à 8h.</p>
+    <form method="POST">
+        <label>Ton nom (laisser vide pour rester anonyme) :</label>
+        <input type="text" name="sender" placeholder="Ton nom">
+        <label>Choisis le destinataire :</label>
+        <select name="recipient" required>
+            <option value="">-- Sélectionne --</option>
+            {% for member in team_members %}
+                <option value="{{ member }}">{{ member }}</option>
+            {% endfor %}
+        </select>
+        <label>Ton compliment :</label>
+        <textarea name="text" placeholder="Écris ton compliment ici..." required></textarea>
+        <label>
+            <input type="checkbox" name="anonymous"> Envoyer anonymement
+        </label>
+        <label>Méthode de réception :</label>
+        <input type="radio" name="delivery_method" value="email" id="delivery_email" checked>
+        <label for="delivery_email">Email</label>
+        <input type="radio" name="delivery_method" value="slack" id="delivery_slack">
+        <label for="delivery_slack">Slack</label>
+        <div id="emailFields">
+            <label>Email du destinataire :</label>
+            <input type="email" name="dest_email" placeholder="ex: destinataire@entreprise.com">
+            <label>Objet du mail :</label>
+            <input type="text" name="email_subject" placeholder="Objet du compliment">
+        </div>
+        <button type="submit">Envoyer le compliment</button>
+    </form>
+    <script>
+        // Affiche ou masque les champs email selon le choix
+        const emailRadio = document.getElementById('delivery_email');
+        const slackRadio = document.getElementById('delivery_slack');
+        const emailFields = document.getElementById('emailFields');
+        function toggleEmailFields() {
+            emailFields.style.display = emailRadio.checked ? 'block' : 'none';
+        }
+        emailRadio.addEventListener('change', toggleEmailFields);
+        slackRadio.addEventListener('change', toggleEmailFields);
+        toggleEmailFields();
+    </script>
+</body>
+</html>
